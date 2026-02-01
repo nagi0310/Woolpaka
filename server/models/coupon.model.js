@@ -20,7 +20,7 @@ const couponSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       required: true,
-    },
+    }, // deactive it after user used it
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
