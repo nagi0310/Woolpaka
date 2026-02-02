@@ -8,8 +8,8 @@ import {
 import { protectRoute } from "../middleware/auth.middleware.js";
 const cartRoutes = express.Router();
 
-router.get("/", protectRoute, getCartProducts);
-router.post("/", protectRoute, addToCart);
-router.delete("/", protectRoute, removeAllFromCart);
-router.put("/:id", protectRoute, updateQuantity);
+cartRoutes.get("/", protectRoute, getCartProducts);
+cartRoutes.post("/", protectRoute, addToCart);
+cartRoutes.delete("/", protectRoute, removeAllFromCart);
+cartRoutes.put("/:id", protectRoute, updateQuantity);
 export default cartRoutes;
