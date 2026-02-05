@@ -161,7 +161,6 @@ export const recreateToken = async (req, res) => {
   }
 };
 
-// TODO: get profile protect route
 // To get user profile
 export const getProfile = async (req, res) => {
   try {
