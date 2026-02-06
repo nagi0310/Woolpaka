@@ -5,7 +5,7 @@ export const protectRoute = async (req, res, next) => {
   try {
     const accessToken = req.cookies.accessToken;
     if (!accessToken) {
-      res
+      return res
         .status(401)
         .json({ message: "Unauthorized - No access token provided" });
     }
@@ -15,7 +15,7 @@ export const protectRoute = async (req, res, next) => {
       const user = await User.findById(decoded.userId).select("-password");
 
       if (!user) {
-        res.status(401).json({ message: "User not found" });
+        return res.status(401).json({ message: "User not found" });
       }
 
       req.user = user;
@@ -40,7 +40,7 @@ export const adminRoute = (req, res, next) => {
     if (user.role === "admin") {
       next();
     } else {
-      res.status(401).json({ message: "Access denied - Admin only" });
+      return res.status(401).json({ message: "Access denied - Admin only" });
     }
   } catch (error) {
     console.log("Error in adminRoute middleware", error.message);

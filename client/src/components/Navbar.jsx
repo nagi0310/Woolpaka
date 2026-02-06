@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
+import { useUserStore } from "../stores/useUserStore";
 export default function Navbar() {
-  //TODO: fetch real user data
-  const user = true;
-  const cart = [""];
-  const isAdmin = true;
+  const { user, logout } = useUserStore();
+  const cart = user?.cart;
+  const isAdmin = user?.role === "admin" || false;
   return (
-    <header className="fixed top-0 left-0 w-full  backdrop-blur-md shadow-lg z-40 transition-all duration-300 border-b border-gray-500">
+    <header className="fixed top-0 left-0 w-full  backdrop-blur-md shadow-sm z-40 transition-all duration-300 border-b border-primary-200">
       <div className="container mx-auto px-2 py-3">
         <div className="flex flex-wrap justify-between items-center">
           <Link
             to="/"
-            className="text-2xl font-bold text-primary-500 items-center space-x-2 flex"
+            className="text-2xl font-bold  items-center space-x-2 flex"
           >
             Woolpaka
           </Link>
@@ -18,7 +18,7 @@ export default function Navbar() {
             {isAdmin && (
               <Link
                 to={"/"}
-                className="flex relative group border rounded-full px-2 py-1 text-sm gap-1 text-gray-500 hover:text-primary-500 transition duration-300 
+                className="flex relative group border rounded-full px-2 py-1 text-sm gap-1 text-primary-500 hover:text-primary-700 transition duration-300 
 							ease-in-out"
               >
                 <svg
@@ -40,7 +40,7 @@ export default function Navbar() {
             )}
             <Link
               to={"/"}
-              className="relative group text-gray-700 hover:text-primary-500 transition duration-300 
+              className="relative group text-primary-500 hover:text-primary-700 transition duration-300 
 							ease-in-out"
             >
               Home
@@ -62,7 +62,7 @@ export default function Navbar() {
                   />
                 </svg>
 
-                {cart.length > 0 && (
+                {cart?.length > 0 && (
                   <span
                     className="absolute -top-2 -left-2 bg-primary-500 text-white rounded-full px-2 py-0.5 
 							text-xs group-hover:bg-primary-700 transition duration-300 ease-in-out"
@@ -75,7 +75,7 @@ export default function Navbar() {
             )}
             {user ? (
               <button
-                to={"/logout"}
+                onClick={logout}
                 className="border rounded-full px-2 py-1 flex items-center gap-1 cursor-pointer bg-primary-500 hover:bg-primary-700 text-white transition duration-300 
 							ease-in-out"
               >
@@ -135,7 +135,7 @@ export default function Navbar() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
                     />
                   </svg>
                   Login

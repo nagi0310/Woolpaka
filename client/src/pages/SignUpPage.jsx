@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
+import FormField from "../components/FormField";
+import { Link } from "react-router-dom";
+import { useUserStore } from "../stores/useUserStore";
 export default function SignUpPage() {
-  const isLoading = true;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,13 +11,15 @@ export default function SignUpPage() {
     confirmPassword: "",
   });
 
+  const { signup, isLoading } = useUserStore();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    signup(formData);
   };
   return (
     <div>
-      <motion.div
+      <Motion.div
         className="sm:mx-auto sm:w-full sm:max-w-md"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -24,172 +28,175 @@ export default function SignUpPage() {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-primary-500">
           Create your Account
         </h2>
-      </motion.div>
-      <motion.div
+      </Motion.div>
+      <Motion.div
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <div className="bg-primary-700 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-primary-900 py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-200"
-              >
-                Name
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 text-primary-900"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="w-full px-3 py-2 pl-10 bg-gray-100 border border-gray-500 rounded-md shadow-sm placeholder-primary-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="John Doe"
-                />
-              </div>
-            </div>
+            <FormField
+              label="Name"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-primary-200"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  />
+                </svg>
+              }
+              type="text"
+              value={formData.name}
+              required={true}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  name: e.target.value,
+                })
+              }
+              placeholder="John Doe"
+            />
 
-            <div>
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-gray-200"
-              >
-                Email
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 text-primary-900"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                    />
-                  </svg>
-                </div>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  className="w-full px-3 py-2 pl-10 bg-gray-200 border border-primary-900 rounded-md shadow-sm placeholder-primary-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="john@example.com"
-                />
-              </div>
-            </div>
+            <FormField
+              label="Email"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-primary-200"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                  />
+                </svg>
+              }
+              type="email"
+              value={formData.email}
+              required={true}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  email: e.target.value,
+                })
+              }
+              placeholder="john@example.com"
+            />
 
-            <div>
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-gray-200"
-              >
-                Password
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 text-primary-900"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                    />
-                  </svg>
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                  className="w-full px-3 py-2 pl-10 bg-gray-200 border border-primary-900 rounded-md shadow-sm placeholder-primary-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
+            <FormField
+              label="Password"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-primary-200"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                  />
+                </svg>
+              }
+              type="password"
+              value={formData.password}
+              required={true}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  password: e.target.value,
+                })
+              }
+              placeholder="••••••••"
+            />
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="text-sm font-medium text-gray-200"
-              >
-                Confirm Password
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FormField
+              label="Confirm Password"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-primary-200"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                  />
+                </svg>
+              }
+              type="password"
+              value={formData.confirmPassword}
+              required={true}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  confirmPassword: e.target.value,
+                })
+              }
+              placeholder="••••••••"
+            />
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary-700 bg-primary-200 hover:bg-primary-300 cursor-pointer"
+            >
+              {isLoading ? (
+                <>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="size-6 text-primary-900"
+                    className="size-6 mr-2 animate-spin"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
                     />
                   </svg>
-                </div>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 pl-10 bg-gray-200 border border-primary-900 rounded-md shadow-sm placeholder-primary-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
+                  Loading...
+                </>
+              ) : (
+                "Sign Up"
+              )}
+            </button>
           </form>
+
+          <div className="mt-8 text-center text-sm text-primary-200 ">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="underline font-medium text-primary-100 hover:text-primary-50"
+            >
+              Login
+            </Link>
+          </div>
         </div>
-      </motion.div>
+      </Motion.div>
     </div>
   );
 }
