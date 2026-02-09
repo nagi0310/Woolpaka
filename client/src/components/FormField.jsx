@@ -1,11 +1,12 @@
 export default function FormField({
   label,
-  icon,
+  icon = "",
   type,
   value,
   required,
   onChange,
-  placeholder,
+  placeholder = "",
+  className = "w-full px-3 py-2 pl-10 text-primary-200 bg-primary-700 border border-primary-600 rounded-md shadow-sm placeholder-primary-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500",
 }) {
   return (
     <div>
@@ -22,7 +23,7 @@ export default function FormField({
           required={required}
           value={value}
           onChange={onChange}
-          className="w-full px-3 py-2 pl-10 text-primary-200 bg-primary-700 border border-primary-600 rounded-md shadow-sm placeholder-primary-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+          className={className}
           placeholder={placeholder}
         />
       </div>
