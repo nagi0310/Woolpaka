@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
+import { useCartStore } from "../stores/useCartStore";
 export default function Navbar() {
   const { user, logout } = useUserStore();
-  const cart = user?.cart;
+  const { cart } = useCartStore();
   const isAdmin = user?.role === "admin" || false;
+  // console.log(user?.cartItems);
   return (
     <header className="fixed top-0 left-0 w-full  backdrop-blur-md shadow-sm z-40 transition-all duration-300 border-b border-primary-200">
       <div className="container mx-auto px-2 py-3">
@@ -82,7 +84,7 @@ export default function Navbar() {
                     className="absolute -top-2 -left-2 bg-primary-500 text-white rounded-full px-2 py-0.5 
 							text-xs group-hover:bg-primary-700 transition duration-300 ease-in-out"
                   >
-                    {/* {cart.length} */}3
+                    {cart.length}
                   </span>
                 )}
                 <span className="hidden sm:inline">Cart</span>

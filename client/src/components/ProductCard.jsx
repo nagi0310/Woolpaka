@@ -1,13 +1,17 @@
 import toast from "react-hot-toast";
 import { useUserStore } from "../stores/useUserStore";
+import { useCartStore } from "../stores/useCartStore";
 
 const ProductCard = ({ product }) => {
   const { user } = useUserStore();
+  const { addToCart } = useCartStore();
   const handleAddToCart = () => {
     if (!user) {
       toast.error("Please Login to add products to cart", { id: "Login" });
       return;
-    } else toast.success("Added to cart");
+    } else {
+      addToCart(product);
+    }
   };
   return (
     <div className="flex w-full relative flex-col overflow-hidden rounded border border-primary-50 shadow-sm">
