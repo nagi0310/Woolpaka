@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
     }
   };
   return (
-    <div className="flex w-full relative flex-col overflow-hidden rounded border border-primary-50 shadow-sm">
+    <div className="flex w-full relative flex-col overflow-hidden rounded-lg border border-primary-50 shadow-sm bg-primary-200 hover:scale-105">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded">
         <img
           src={product.image}
@@ -24,12 +24,12 @@ const ProductCard = ({ product }) => {
         <div className="absolute inset-0 bg-primary-100/20"></div>
       </div>
       <div className="mt-4 px-5 pb-5">
-        <h5 className="text-xl font-semibold tracking-light text-primary-500">
+        <h5 className="text-lg font-semibold tracking-light text-primary-500">
           {product.name}
         </h5>
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
-            <span className="text-3xl font-bold text-primary-700">
+            <span className="text-2xl font-bold text-primary-700">
               ${product.price}
             </span>
           </p>

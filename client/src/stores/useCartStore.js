@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import axios from "../lib/axios";
 import toast from "react-hot-toast";
-
 export const useCartStore = create((set, get) => ({
   cart: [],
   coupon: null,
   total: 0,
   subtotal: 0,
+  isCouponApplied: false,
 
   getCartItems: async () => {
     try {
@@ -14,9 +14,11 @@ export const useCartStore = create((set, get) => ({
       set({ cart: res.data });
       get().calculateTotals();
     } catch (error) {
+      console.log(error);
       set({ cart: [] });
       return toast.error(
-        error.response?.data?.message || "An error happenened",
+        error.response?.data?.message ||
+          "An error happenened in getting cart items",
       );
     }
   },
@@ -25,37 +27,39 @@ export const useCartStore = create((set, get) => ({
     try {
       await axios.post("/cart", { productId: product._id });
       toast.success("Product added");
-      // set((prevState) => {
-      //   console.log(prevState.cart);
-      //   // check if item existing in cart
-      //   const existingItem = prevState.cart.find(
-      //     (item) => item._id === product._id,
-      //   );
-      //   // if existing, add quantity by 1 otherwise add to the cart
-      //   const newCart = existingItem
-      //     ? prevState.cart.map((item) =>
-      //         item._id === product._id
-      //           ? { ...item, quantity: item.quantity + 1 }
-      //           : item,
-      //       )
-      //     : [...prevState.cart, { ...product, quantity: 1 }];
-      //   return { cart: newCart };
-      // });
-      // get().calculateTotals();
-      get().getCartItems();
+      set((prevState) => {
+        // check if item existing in cart
+        const existingItem = prevState.cart.find(
+          (item) => item._id === product._id,
+        );
+        // if existing, add quantity by 1 otherwise add to the cart
+        const newCart = existingItem
+          ? prevState.cart.map((item) =>
+              item._id === product._id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item,
+            )
+          : [...prevState.cart, { ...product, quantity: 1 }];
+        return { cart: newCart };
+      });
+      get().calculateTotals();
     } catch (error) {
       console.log(error);
       return toast.error(
-        error.response?.data?.message || "An error happenened",
+        error.response?.data?.message ||
+          "An error happenened in adding products",
       );
     }
   },
 
-  removeFromCart: async (product) => {
+  removeFromCart: async (productId) => {
     try {
-      await axios.delete("/cart", { productId: product._id });
+      await axios.delete("/cart", { data: { productId } });
+      set((prevState) => ({
+        cart: prevState.cart.filter((item) => item._id !== productId),
+      }));
+      get().calculateTotals();
       toast.success("Product deleted");
-      get().getCartItems();
     } catch (error) {
       return toast.error(
         error.response?.data?.message ||
@@ -64,7 +68,28 @@ export const useCartStore = create((set, get) => ({
     }
   },
 
-  updateQuantity: async (product) => {},
+  updateQuantity: async (productId, quantity) => {
+    try {
+      if (quantity === 0) {
+        await get().removeFromCart(productId);
+        return;
+      }
+      await axios.put(`/cart/${productId}`, { quantity });
+      set((prevState) => ({
+        cart: prevState.cart.map((item) =>
+          item._id === productId ? { ...item, quantity: quantity } : item,
+        ),
+      }));
+
+      get().calculateTotals();
+      toast.success("Cart updated");
+    } catch (error) {
+      return toast.error(
+        error.response?.data?.message ||
+          "An error happenened in update quantity",
+      );
+    }
+  },
 
   calculateTotals: () => {
     const { cart, coupon } = get();
@@ -72,6 +97,7 @@ export const useCartStore = create((set, get) => ({
       (sum, item) => sum + item.price * item.quantity,
       0,
     );
+    console.log(subtotal);
     let total = subtotal;
     if (coupon) {
       // Is divide by 100 necessary

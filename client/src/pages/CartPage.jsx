@@ -2,6 +2,8 @@ import { useCartStore } from "../stores/useCartStore";
 import { motion as Motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import CartItem from "../components/CartItem";
+import OrderSummary from "../components/OrderSummary";
+import RelatedProducts from "../components/RelatedProducts";
 
 const CartPage = () => {
   const { cart } = useCartStore();
@@ -9,8 +11,25 @@ const CartPage = () => {
 
   return (
     <div className="py-8 md:py-16">
-      <div className="mx-auto max-w-7xl px-4 2xl:px-0">
-        <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
+      <div className="mx-auto max-w-7xl px-4 2xl:px-0 flex flex-col md:flex-row">
+        <Motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex-1 max-w-4xl"
+        >
+          <h1 className="text-start text-4xl sm:text-5xl font-bold text-primary-700 mb-4">
+            ShoppingCart
+            <span className="text-xl font-semibold text-primary-500 ml-4">
+              {cart.length} items
+            </span>
+          </h1>
+          <div className="grid grid-cols-[2fr_1fr_1fr] text-primary-500 text-lg font-medium pb-3 px-2 md:p-4">
+            <p className="text-start">Product Details</p>
+            <p className="text-center">Subtotal</p>
+            <p className="text-center">Delete</p>
+          </div>
+
           <Motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -19,8 +38,18 @@ const CartPage = () => {
             {cart.map((item) => (
               <CartItem key={item._id} item={item} />
             ))}
+            {cart.length > 0 && <RelatedProducts />}
           </Motion.div>
-        </div>
+        </Motion.div>
+        {cart.length > 0 && (
+          <Motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <OrderSummary />
+          </Motion.div>
+        )}
       </div>
     </div>
   );
