@@ -56,8 +56,8 @@ const OrderSummary = () => {
         >
           Proceed to Check
         </Motion.button>
-        <div className="flex items-center justify-center gap-2">
-          <span className="test-sm font-normal text-primary-100">or</span>
+        <div className="flex flex-col items-center justify-center gap-2">
+          <span className="test-sm font-normal text-primary-300">or</span>
           <Link
             to="/"
             className="flex items-center gap-2 txt-sm font-medium text-primary-100 underline hover:text-primary-50 hover:no-underline"
