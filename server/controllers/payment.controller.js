@@ -54,7 +54,7 @@ export const createCheckoutSession = async (req, res) => {
         ? [{ coupon: await createStripeCoupon(coupon.discountPercentage) }]
         : [],
       metadata: {
-        userId: req.user._id,
+        userId: req.user._id.toString(),
         couponCode: couponCode || "",
         products: JSON.stringify(
           products.map((product) => ({
@@ -71,7 +71,13 @@ export const createCheckoutSession = async (req, res) => {
       await createNewCoupon(req.user._id);
     }
 
-    res.status(200).json({ id: session.id, totalAmount: totalAmount / 100 });
+    res
+      .status(200)
+      .json({
+        id: session.id,
+        url: session.url,
+        totalAmount: totalAmount / 100,
+      });
   } catch (error) {
     console.log("Error in createCheckoutSession controller", error.message);
     res.status(500).json({ message: "Server error", error: error.message });

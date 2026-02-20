@@ -1,10 +1,22 @@
 import { Link } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
 import { motion as Motion } from "framer-motion";
+import axios from "../lib/axios";
+
 const OrderSummary = () => {
-  const { total, subtotal, coupon, isCouponApplied } = useCartStore();
-  //   const savings = subtotal - total;
-  const savings = 2;
+  const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
+  const savings = subtotal - total;
+
+  const handlePayment = async () => {
+    const res = await axios.post("/payments/create-checkout-session", {
+      products: cart,
+      couponCode: coupon ? coupon.code : null,
+    });
+    const session = res.data;
+    if (session?.url) {
+      window.location.replace(session.url);
+    }
+  };
   return (
     <div className="max-w-90 w-full border border-primary-500 shadow-sm rounded-md bg-primary-700 max-md:mt-16 mt-10 p-5">
       <h2 className="text-3xl md:texl-3xl font-bold text-primary-100">
@@ -53,6 +65,7 @@ const OrderSummary = () => {
           hover:bg-primary-100 docus:outline-none"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={handlePayment}
         >
           Proceed to Check
         </Motion.button>
