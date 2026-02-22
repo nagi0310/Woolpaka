@@ -11,6 +11,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import AddProduct from "./pages/AddProduct";
 import CategoryPage from "./pages/CategoryPage";
 import CartPage from "./pages/CartPage";
+import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
 import { useCartStore } from "./stores/useCartStore";
 
 function App() {
@@ -48,6 +49,10 @@ function App() {
           <Route
             path="/cart"
             element={user ? <CartPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/purchase-success"
+            element={user ? <PurchaseSuccessPage /> : <Navigate to="/" />}
           />
           <Route
             path="/admin"

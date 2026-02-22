@@ -43,22 +43,23 @@ const OrderSummary = () => {
               </dd>
             </dl>
           )}
-          {coupon && isCouponApplied && (
-            <dl className="flex items-center justify-between gap-4">
-              <dt className="text-base font-formal text-primary-50">
-                Coupon {coupon.code}
-              </dt>
-              <dd className="text-base font-medium text-primary-50">
-                -{coupon.discountPercentage}%
-              </dd>
-            </dl>
-          )}
+
           <dl className="flex items-center justify-between border-t border-primary-300 pt-2">
             <dt className="text-lg font-bold text-primary-50">Total</dt>
             <dd className="text-lg font-bold text-primary-50">
               ${total.toFixed(2)}
             </dd>
           </dl>
+          {coupon && isCouponApplied && (
+            <dl className="flex items-center justify-between gap-4">
+              <dt className="text-sm font-formal text-primary-50">
+                * Coupon {coupon.code}
+              </dt>
+              <dd className="text-sm font-medium text-primary-50">
+                -{coupon.discountPercentage}% Applied
+              </dd>
+            </dl>
+          )}
         </div>
         <Motion.button
           className="flex w-full items-center justify-center rounded bg-primary-200 px-5 py-2.5 text-sm font-medium text-primary-7-0

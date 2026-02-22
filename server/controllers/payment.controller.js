@@ -1,6 +1,7 @@
 import stripe from "../lib/stripe.js";
 import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
+import User from "../models/user.model.js";
 export const createCheckoutSession = async (req, res) => {
   try {
     const { products, couponCode } = req.body;
@@ -58,7 +59,7 @@ export const createCheckoutSession = async (req, res) => {
         couponCode: couponCode || "",
         products: JSON.stringify(
           products.map((product) => ({
-            id: product.id,
+            id: product._id,
             quantity: product.quantity,
             price: product.price,
           })),
@@ -71,13 +72,11 @@ export const createCheckoutSession = async (req, res) => {
       await createNewCoupon(req.user._id);
     }
 
-    res
-      .status(200)
-      .json({
-        id: session.id,
-        url: session.url,
-        totalAmount: totalAmount / 100,
-      });
+    res.status(200).json({
+      id: session.id,
+      url: session.url,
+      totalAmount: totalAmount / 100,
+    });
   } catch (error) {
     console.log("Error in createCheckoutSession controller", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
@@ -88,8 +87,7 @@ export const CheckoutSuccess = async (req, res) => {
   try {
     const { sessionId } = req.body;
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-    if (session.payment.status == "paid") {
+    if (session.status == "complete") {
       // Deactivate the coupon
       if (session.metadata.couponCode) {
         const coupon = await Coupon.findOneAndUpdate(
@@ -115,6 +113,13 @@ export const CheckoutSuccess = async (req, res) => {
         totalAmount: session.amount_total / 100,
         stripeSessionId: session.id,
       });
+
+      // Clear the products in cart in database
+      await User.findByIdAndUpdate(
+        session.metadata.userId,
+        { $set: { cartItems: [] } },
+        { new: true },
+      );
 
       res.status(200).json({
         success: true,
@@ -142,6 +147,9 @@ async function createStripeCoupon(discountPercentage) {
 }
 
 async function createNewCoupon(userId) {
+  // Delete the previous coupon (user can only have one coupon at a time)
+  await Coupon.findOneAndDelete({ userId: userId });
+  // Create a new coupon
   const newCoupon = await Coupon.create({
     code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
     discountPercentage: 10,

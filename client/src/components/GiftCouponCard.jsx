@@ -1,17 +1,25 @@
-import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCartStore } from "../stores/useCartStore";
+
 const GiftCouponCard = () => {
-  //   const coupon = "NIOWI8NMIO9";
-  //   const isCouponApplied = true;
-  const { coupon, isCouponApplied } = useCartStore();
+  const { coupon, isCouponApplied, getMyCoupon, applyCoupon, removeCoupon } =
+    useCartStore();
   const [userInputCode, setUserInputCode] = useState("");
+
+  useEffect(() => {
+    getMyCoupon();
+  }, [getMyCoupon]);
+
   const handleApplyCoupon = async () => {
-    console.log(userInputCode);
+    if (!userInputCode) return;
+    await applyCoupon(userInputCode);
   };
+
   const handleRemoveCoupon = async () => {
-    console.log(userInputCode);
+    removeCoupon();
+    setUserInputCode("");
+    await getMyCoupon();
   };
 
   return (
@@ -69,7 +77,7 @@ const GiftCouponCard = () => {
           <h3 className="text-lg font-medium text-primary-100">
             Your Available Coupon
           </h3>
-          <p className="mt-2 text-sm text-primary-50">
+          <p className="mt-2 text-sm text-primary-200">
             {coupon.code} - {coupon.discountPercentage}%
           </p>
         </div>
