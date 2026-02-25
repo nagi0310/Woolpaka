@@ -17,7 +17,7 @@ const CartPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex-1 max-w-4xl"
+          className="flex-1 max-w-4xl mr-6"
         >
           <h1 className="text-start text-4xl sm:text-5xl font-bold text-primary-700 mb-4">
             ShoppingCart

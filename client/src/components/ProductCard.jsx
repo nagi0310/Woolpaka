@@ -1,10 +1,12 @@
 import toast from "react-hot-toast";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const { user } = useUserStore();
   const { addToCart } = useCartStore();
+  const navigate = useNavigate();
   const handleAddToCart = () => {
     if (!user) {
       toast.error("Please Login to add products to cart", { id: "Login" });
@@ -15,6 +17,9 @@ const ProductCard = ({ product }) => {
   };
   return (
     <div
+      onClick={() => {
+        navigate(`/products/${product.category}/${product._id}`);
+      }}
       className={`flex w-full relative flex-col overflow-hidden rounded-lg border border-primary-50 shadow-sm bg-primary-200 hover:scale-103`}
     >
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded">

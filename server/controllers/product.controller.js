@@ -15,6 +15,20 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
+export const getProductById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findOne({ _id: id });
+    res.json(product);
+  } catch (error) {
+    console.log("Error in getProductById controller", error.message);
+    res.status(500).json({
+      message: "Server error - Failed to get product by id",
+      error: error.message,
+    });
+  }
+};
+
 export const getFeaturedProducts = async (req, res) => {
   try {
     let featuredProducts = await redis.get("featured_products");

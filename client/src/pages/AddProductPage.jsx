@@ -3,7 +3,7 @@ import FormField from "../components/FormField";
 import { categories } from "../utils/Categories";
 import { useProductStore } from "../stores/useProductStore";
 
-const AddProduct = () => {
+const AddProductPage = () => {
   const [newProduct, setNewProduct] = useState({
     name: "",
     description: "",
@@ -176,4 +176,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddProductPage;

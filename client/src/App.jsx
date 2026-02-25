@@ -8,8 +8,9 @@ import { Toaster } from "react-hot-toast";
 import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
-import AddProduct from "./pages/AddProduct";
+import AddProductPage from "./pages/AddProductPage";
 import CategoryPage from "./pages/CategoryPage";
+import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
 import { useCartStore } from "./stores/useCartStore";
@@ -45,7 +46,12 @@ function App() {
             path="/login"
             element={!user ? <LoginPage /> : <Navigate to="/" />}
           />
-          <Route path="/products/:category" element={<CategoryPage />} />
+          <Route path="/products">
+            <Route path=":category" element={<CategoryPage />} />
+            <Route path=":category/:id" element={<ProductPage />} />
+          </Route>
+          {/* <Route path="/products/:category" element={<CategoryPage />} />
+          <Route path="/products/:id" element={<ProductPage />} /> */}
           <Route
             path="/cart"
             element={user ? <CartPage /> : <Navigate to="/" />}
@@ -54,15 +60,16 @@ function App() {
             path="/purchase-success"
             element={user ? <PurchaseSuccessPage /> : <Navigate to="/" />}
           />
+
           <Route
             path="/admin"
             element={
               user?.role === "admin" ? <AdminLayout /> : <Navigate to="/" />
             }
           >
-            <Route index element={<AddProduct />} />
-            <Route path="product-list" element={<AddProduct />} />
-            <Route path="orders" element={<AddProduct />} />
+            <Route index element={<AddProductPage />} />
+            <Route path="product-list" element={<AddProductPage />} />
+            <Route path="orders" element={<AddProductPage />} />
           </Route>
         </Routes>
       </div>
