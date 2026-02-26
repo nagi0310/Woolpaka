@@ -19,6 +19,6 @@ router.get("/", protectRoute, adminRoute, getAllProducts);
 router.get("/featured", getFeaturedProducts);
 router.get("/category/:category", getProductsByCategory);
 router.get("/recommendations", getRecommendedProducts);
-router.get("/:id", protectRoute, getProductById);
+router.get("/:id", getProductById);
 
 export default router;

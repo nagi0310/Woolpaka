@@ -14,6 +14,7 @@ import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
 import { useCartStore } from "./stores/useCartStore";
+import AllProductsPage from "./pages/AllProductsPage";
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
@@ -47,11 +48,10 @@ function App() {
             element={!user ? <LoginPage /> : <Navigate to="/" />}
           />
           <Route path="/products">
+            <Route path="/products" index element={<AllProductsPage />} />
             <Route path=":category" element={<CategoryPage />} />
             <Route path=":category/:id" element={<ProductPage />} />
           </Route>
-          {/* <Route path="/products/:category" element={<CategoryPage />} />
-          <Route path="/products/:id" element={<ProductPage />} /> */}
           <Route
             path="/cart"
             element={user ? <CartPage /> : <Navigate to="/" />}

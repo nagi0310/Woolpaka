@@ -11,9 +11,12 @@ const CartItem = ({ item }) => {
           className="w-16 h-16 md:h-20 md:w-20 rounded object-cover "
         />
         <div className="ml-6 w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md md:justify-between">
-          <p className="text-base font-medium text-primary-700 hover:text-primary-700 hover:underline">
+          <Link
+            to={`/products/${item.category}/${item._id}`}
+            className="block text-base font-medium text-primary-700 hover:text-primary-700 hover:underline"
+          >
             {item.name}
-          </p>
+          </Link>
           <Link
             to={`/products/${item.category}`}
             className="text-sm text-primary-700 hover:text-primary-700 hover:underline"
