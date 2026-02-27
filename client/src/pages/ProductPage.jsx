@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useProductStore } from "../stores/useProductStore";
 import { Link, useParams } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
 import ProductDetail from "../components/ProductDetail";
 
 const ProductPage = () => {
@@ -19,7 +18,7 @@ const ProductPage = () => {
             <div className="text-primary-500 text-lg underline cursor-pointer">
               <Link to="/">Home</Link>/<Link to="/products">Products</Link>/
               <Link to={`/products/${product.category}`}>
-                {product.category}
+                {product.category[0].toUpperCase() + product.category.slice(1)}
               </Link>
               /<span className="text-primary-700">{product.name}</span>
             </div>
