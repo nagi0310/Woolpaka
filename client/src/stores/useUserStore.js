@@ -69,12 +69,20 @@ export const useUserStore = create((set, get) => ({
 
 // axios interceptors to refresh the access token
 let refreshPromise = null;
+const SKIP_REFRESH_URLS = ["/auth/recreate-token", "/auth/logout"];
+
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const url = originalRequest?.url || "";
+    const shouldSkip = SKIP_REFRESH_URLS.some((p) => url.includes(p));
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !shouldSkip
+    ) {
       originalRequest._retry = true;
 
       try {
@@ -90,7 +98,8 @@ axios.interceptors.response.use(
         return axios(originalRequest);
       } catch (refreshError) {
         refreshPromise = null;
-        await useUserStore.getState().logout();
+        // Clear user
+        useUserStore.setState({ user: null });
         return Promise.reject(refreshError);
       }
     }
