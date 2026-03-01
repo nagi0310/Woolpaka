@@ -116,10 +116,12 @@ export const logout = async (req, res) => {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
 
-    res.json({ message: "Logged out successfully" });
+    return res.json({ message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
-    res.status(500).json({ message: "Server error", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
   }
 };
 
@@ -128,7 +130,7 @@ export const recreateToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-      res.status(401).json({ message: "Refresh Token not found" });
+      return res.status(401).json({ message: "Refresh Token not found" });
     }
 
     // decode the user
@@ -153,7 +155,7 @@ export const recreateToken = async (req, res) => {
 
       res.json({ message: "Token recreated successfully" });
     } else {
-      res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({ message: "Invalid refresh token" });
     }
   } catch (error) {
     console.log("Error in recreateToken controller", error.message);

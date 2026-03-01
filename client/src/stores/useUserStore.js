@@ -45,13 +45,55 @@ export const useUserStore = create((set, get) => ({
   },
 
   logout: async () => {
-    set({ loading: true });
+    set({ isLoading: true });
     try {
       await axios.post("/auth/logout");
-      set({ user: null, loading: false });
+      set({ user: null, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       return toast.error(error.response?.data?.message || "An error happened");
     }
   },
+
+  refreshToken: async () => {
+    set({ checkingAuth: true });
+    try {
+      await axios.post("/auth/recreate-token");
+      set({ checkingAuth: false });
+    } catch (error) {
+      set({ user: null, checkingAuth: false });
+      throw error;
+    }
+  },
 }));
+
+// axios interceptors to refresh the access token
+let refreshPromise = null;
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // if a refresh promise is already in progress, wait for it to complete
+        if (refreshPromise) {
+          await refreshPromise;
+        } else {
+          // start a new refresh promise
+          refreshPromise = useUserStore.getState().refreshToken();
+          await refreshPromise;
+          refreshPromise = null;
+        }
+        return axios(originalRequest);
+      } catch (refreshError) {
+        refreshPromise = null;
+        await useUserStore.getState().logout();
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  },
+);

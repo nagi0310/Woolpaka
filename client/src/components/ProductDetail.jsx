@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
 import { useUserStore } from "../stores/useUserStore";
 import RelatedProducts from "./RelatedProducts";
+import toast from "react-hot-toast";
 const ProductDetail = ({ product }) => {
   const { user } = useUserStore();
   const { addToCart } = useCartStore();
@@ -27,12 +28,8 @@ const ProductDetail = ({ product }) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col md:flex-row gap-16 mt-4">
-        <div className="border border-primary-500/30 max-w-100 max-h-100 rounded overflow-hidden">
-          <img
-            alt="Product"
-            src={product.image}
-            className="max-w-100 max-h-100"
-          ></img>
+        <div className=" max-w-100 max-h-100 rounded overflow-hidden">
+          <img alt="Product" src={product.image} className="max-w-100"></img>
         </div>
         <div className="text-sm w-full md:w-1/2">
           <h1 className="text-3xl font-medium">{product.name}</h1>

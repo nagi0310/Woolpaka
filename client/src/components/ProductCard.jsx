@@ -17,12 +17,14 @@ const ProductCard = ({ product }) => {
   };
   return (
     <div
-      onClick={() => {
-        navigate(`/products/${product.category}/${product._id}`);
-      }}
       className={`flex w-full relative flex-col overflow-hidden rounded-lg border border-primary-50 shadow-sm bg-primary-200 hover:scale-103`}
     >
-      <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded">
+      <div
+        onClick={() => {
+          navigate(`/products/${product.category}/${product._id}`);
+        }}
+        className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded"
+      >
         <img
           src={product.image}
           alt="product image"

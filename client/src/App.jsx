@@ -35,10 +35,7 @@ function App() {
       <div className="z-50 relative pt-20">
         <Navbar />
         <Routes>
-          <Route
-            path="/"
-            element={user ? <HomePage /> : <Navigate to="/login" />}
-          />
+          <Route path="/" element={<HomePage />} />
           <Route
             path="/signup"
             element={!user ? <SignUpPage /> : <Navigate to="/" />}
